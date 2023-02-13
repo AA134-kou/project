@@ -44,7 +44,6 @@ def callback():
         abort(400)
     return 'OK'
 @handler.add(MessageEvent, message=TextMessage)
-# ここから実装開始
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
