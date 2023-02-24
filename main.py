@@ -49,12 +49,19 @@ def callback():
 def follow_message(line_follow_event):
         profile = line_bot_api.get_profile(line_follow_event.source.user_id)
         logger.info(profile)
-        line_bot_api.reply_message(line_follow_event.reply_token, TextSendMessage(text=f'{profile.display_name}さん、フォローありがとう!\n'))
+        line_bot_api.reply_message(line_follow_event.reply_token, TextSendMessage(text=f'{profile.display_name}さん、フォローありがとう!レシピと入力すると選択肢が現れるよ！！\n'))
 @handler.add(MessageEvent, message=TextMessage)
 # ここから実装開始
 def handle_message(line_reply_event):
-    line_bot_api.reply_message(
-        line_reply_event.reply_token,
-        TextSendMessage(text=line_reply_event.message.text))
+    profile = line_bot_api.get_profile(line_reply_event.source.user_id)
+    logger.info(profile)
+    message = line_reply_event.message.text.lower()
+    if message == 'レシピ':
+        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='このレシピでいいですか',
+                            quick_reply=QuickReply(items=[
+                                QuickReplyButton(action=PostbackAction(label="〇", data="〇", text="〇")),
+                                QuickReplyButton(action=PostbackAction(label="×", data="×", text="×")),
+                            ])
+                    ))
 if __name__ == "__main__":
     app.run()
