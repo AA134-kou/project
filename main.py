@@ -53,8 +53,6 @@ def follow_message(line_follow_event):
 @handler.add(MessageEvent, message=TextMessage)
 # ここから実装開始
 def handle_message(line_reply_event):
-    profile = line_bot_api.get_profile(line_reply_event.source.user_id)
-    logger.info(profile)
     line_bot_api.reply_message(
         line_reply_event.reply_token,
         TextSendMessage(text=line_reply_event.message.text))
