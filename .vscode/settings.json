@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/bfb0c7da-1bf8-47fa-a301-47cf0442913e/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/cookbot-prototype",
-    "appService.deploySubpath": "."
-}

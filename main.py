@@ -1,7 +1,10 @@
 #モジュールをインポート(モジュールが分からなかったら調べてください)
 import os
-
+import logging
 from flask import Flask, request, abort
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -10,7 +13,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage
+    MessageEvent, TextMessage, TextSendMessage, QuickReply, QuickReplyButton, MessageAction, PostbackAction, FollowEvent
 )
 
 app = Flask(__name__)
@@ -19,7 +22,6 @@ app = Flask(__name__)
 #export LINE_CHANNEL_SECRET=【シークレットチャンネルキー】,  export LINE_CHANNEL_ACCESS_TOKEN= 【チャンネルアクセストークン】
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-API_TOKEN = os.getenv("API_TOKEN")
 
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
@@ -43,10 +45,16 @@ def callback():
         print("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
     return 'OK'
+@handler.add(FollowEvent)
+def follow_message(line_follow_event):
+        profile = line_bot_api.get_profile(line_follow_event.source.user_id)
+        logger.info(profile)
+        line_bot_api.reply_message(line_follow_event.reply_token, TextSendMessage(text=f'{profile.display_name}さん、フォローありがとう!\n'))
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+# ここから実装開始
+def handle_message(line_reply_event):
     line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+        line_reply_event.reply_token,
+        TextSendMessage(text=line_reply_event.message.text))
 if __name__ == "__main__":
     app.run()
