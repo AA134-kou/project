@@ -56,12 +56,34 @@ def handle_message(line_reply_event):
     profile = line_bot_api.get_profile(line_reply_event.source.user_id)
     logger.info(profile)
     message = line_reply_event.message.text.lower()
-    if message == 'レシピ':
-        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='このレシピでいいですか',
-                            quick_reply=QuickReply(items=[
-                                QuickReplyButton(action=PostbackAction(label="〇", data="〇", text="〇")),
-                                QuickReplyButton(action=PostbackAction(label="×", data="×", text="×")),
+    if message == '探す':
+        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='いずれかを選択してね', quick_reply=QuickReply(items=[
+                                QuickReplyButton(action=PostbackAction(label="レシートから探す", data="レシートから探す", text="レシートから探す")),
+                                QuickReplyButton(action=PostbackAction(label="キーワードで探す", data="キーワードで探す", text="キーワードで探す")),
+                                QuickReplyButton(action=PostbackAction(label="リマインドをお願い", data="リマインドをお願い", text="リマインドをお願い")),
                             ])
                     ))
+    elif message == 'レシートから探す':
+        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='いずれかを選択してね', quick_reply=QuickReply(items=[
+                                QuickReplyButton(action=PostbackAction(label="レシートから探す", data="レシートから探す", text="レシートから探す")),
+                                QuickReplyButton(action=PostbackAction(label="キーワードで探す", data="キーワードで探す", text="キーワードで探す")),
+                                QuickReplyButton(action=PostbackAction(label="リマインドをお願い", data="リマインドをお願い", text="リマインドをお願い")),
+                            ])
+                    ))
+    elif message == 'キーワードで探す':
+        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='いずれかを選択してね', quick_reply=QuickReply(items=[
+                                QuickReplyButton(action=PostbackAction(label="レシートから探す", data="レシートから探す", text="レシートから探す")),
+                                QuickReplyButton(action=PostbackAction(label="キーワードで探す", data="キーワードで探す", text="キーワードで探す")),
+                                QuickReplyButton(action=PostbackAction(label="リマインドをお願い", data="リマインドをお願い", text="リマインドをお願い")),
+                            ])
+                    ))
+    else message == 'リマインドをお願い':
+        line_bot_api.reply_message(line_reply_event.reply_token,TextSendMessage(text='いずれかを選択してね', quick_reply=QuickReply(items=[
+                                QuickReplyButton(action=PostbackAction(label="レシートから探す", data="レシートから探す", text="レシートから探す")),
+                                QuickReplyButton(action=PostbackAction(label="キーワードで探す", data="キーワードで探す", text="キーワードで探す")),
+                                QuickReplyButton(action=PostbackAction(label="リマインドをお願い", data="リマインドをお願い", text="リマインドをお願い")),
+                            ])
+                    ))
+    handler.handle(body, signature)
 if __name__ == "__main__":
     app.run()
